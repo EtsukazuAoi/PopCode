@@ -1,0 +1,41 @@
+body {
+    background-image: url("./ressource/Chargement.png");
+    background-position: center;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+.autherdevice {
+      display: none;
+}
+#loader {
+    background-color: black;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    height: 100vh;
+    width: 100vw;
+}
+#conditions {
+    background-color: rgba(0, 0, 0, 0.25);
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 100vh;
+    width: 100vw;
+    color: white;
+    padding: 10px;
+    text-align: center;
+  }
+@media screen and (-webkit-min-device-pixel-ratio: 2){
+    .autherdevice {
+      display: block;
+      padding: 40vh 10px;
+    }
+    body {
+        background-image: unset;
+        background-color: black;
+        color: white;
+        text-align: center;
+    } 
+}
