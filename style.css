@@ -4,12 +4,18 @@ body {
     background-size: 100%;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+    overflow-y: scroll; 
+}
+body::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera */
 }
 .autherdevice {
       display: none;
 }
 #loader {
-    background-color: black;
+    background-color: rgba(0, 0, 0, 0.75);
     position: fixed;
     top: 0px;
     left: 0px;
@@ -21,12 +27,37 @@ body {
     position: absolute;
     top: 0px;
     left: 0px;
-    height: 100vh;
-    width: 100vw;
+    /*! height: 100vh; */
+    width: 97vw;
     color: white;
     padding: 10px;
     text-align: center;
+    overflow: auto  ;
+    height: 100vh;
+}
+#conditions p {
+    max-width: 50%;
+    transform: translate(50%, 0);
+}
+.close {
+    position: absolute;
+    top: 5vh;
+    right: 5vw;
+    background-color: red;
+    padding: 4px 10px;
+    font-size: 28px;
   }
+ul {
+    list-style: none;
+}
+.conditonbtn {
+    color: white;
+    position: absolute;
+    bottom: 3vh;
+    right: 3vw;
+    cursor: pointer;
+}
+
 @media screen and (-webkit-min-device-pixel-ratio: 2){
     .autherdevice {
       display: block;
