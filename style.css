@@ -21,18 +21,21 @@ body::-webkit-scrollbar {
     left: 0px;
     height: 100vh;
     width: 100vw;
+    display: none;
 }
 #conditions {
-    background-color: rgba(0, 0, 0, 0.25);
+    background-color: rgba(0, 0, 0, 0.75);
     position: absolute;
     top: 0px;
     left: 0px;
     /*! height: 100vh; */
-    width: 97vw;
+    width: 100vw;
     color: white;
     padding: 10px;
     text-align: center;
-    overflow: auto  ;
+    overflow: auto;
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
     height: 100vh;
 }
 #conditions p {
@@ -46,7 +49,8 @@ body::-webkit-scrollbar {
     background-color: red;
     padding: 4px 10px;
     font-size: 28px;
-  }
+}
+
 ul {
     list-style: none;
 }

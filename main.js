@@ -50,3 +50,11 @@ function init(){
 }
 
 init()
+
+document.addEventListener('keydown', function(event){
+	if(event.key === "Escape"){
+        if(document.getElementById("conditions").style.display != "none"){
+		    document.getElementById("conditions").style.display = "none";
+        }
+	}
+});
