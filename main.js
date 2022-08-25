@@ -6,26 +6,83 @@ var listfound = [];
 var languages = {};
 var mentions = {};
 
+function startanimation(){
+    const progressBar = document.querySelector(".bar");
+    const progressBarValue = document.querySelector('.bar__value');
+    const text = document.querySelector('.langcount');
+    let value = 0;
+    const max = 100;
 
+    let anim = setInterval(() => {
+    if (value == max) {
+        clearInterval(anim);
+        document.querySelector(".neon-bar").style.display = 'none';
+        document.querySelector(".start0").style.display = '';
+        if(!isEmpty(gamesave)){
+            document.querySelector(".start1").style.display = '';
+        }
+        document.getElementById("start").style.backgroundColor = "";
+    } else {
+        value += 1;
+        progressBar.value = value;
+        progressBarValue.innerText = value + '%';
+        text.innerHTML = parseInt(value/100*30);
+    }
+    }, 80);
+}
 function hide(event){
     event.target.parentNode.style.display = "none";
+    event.target.parentNode.style.zIndex = "0";
+}
+
+function isEmpty(obj) {
+    return Object.keys(obj).length === 0;
+}
+
+function newElement(type, object){
+    var element = document.createElement(type);
+    for(var i in object){
+        element[i] = object[i];
+    }
+    return element;
 }
 
 function closebtn(name) {
-    var closebtn = document.createElement("span");
-    closebtn.className = "close";
-    closebtn.innerHTML = "&times;";
+    var closebtn = newElement("span", {"className": "close btn","innerHTML": "&times;"});
     closebtn.addEventListener("click", hide);
     return closebtn;
 }
 
-function init(){
-    // LOADER
-    var loader = document.createElement('div');
-    loader.id = 'loader';
-    loader.style.zIndex = '0';
-    page.appendChild(loader);
+function startgame(type){
+    var game = document.getElementById("gamepage");
+    game.style.zIndex = "2";
+    game.style.display = "";
+}
 
+function init(){
+    // START
+    var start = newElement("div",{"id": "start","style": "background-color: rgba(0, 0, 0, 0.75)"/*"zIndex:0;display:none"*/});
+    var logo = newElement("img",{"src":"ressource/Logo2.svg","className":"CenteredImage centerelement"});
+    var text0 = newElement("p",{"className":"centerelement langcount","style": "font-size:150px;color:#0AEFF7;background: -webkit-linear-gradient(#057C80, #0AEFF7);background-clip: border-box; -webkit-background-clip: text; -webkit-text-fill-color: transparent","innerHTML": "0"});
+    var text1 = newElement("p",{"className":"centerelement","style": "font-size:15px;font-family:GothanLight","innerHTML": "Références de<br>langages de programmation<br>à retrouver"});
+    var text = newElement("p",{"innerHTML": "Cliquer ici pour commencée","className":"centerelement btn start0","style": "color:#FFAAFF;margin-top:5vh;display:none"});
+    var text2 = newElement("p",{"innerHTML": "Cliquer ici pour continué","className":"centerelement btn start1","style": "color:#FFAAFF;margin-top:5vh;display:none"});
+    var charging = newElement("div",{"style": "margin-top:5vh","className":"neon-bar","innerHTML": "<progress class='bar' value='0' max='100'></progress><span class='bar__value'>0%</span>"});
+    text.addEventListener("click", function(){startgame(0)});
+    text2.addEventListener("click", function(){startgame(1)});
+
+    start.appendChild(logo);
+    start.appendChild(text0);
+    start.appendChild(text1);
+
+    start.appendChild(text);    
+    start.appendChild(text2);
+    start.appendChild(charging);
+
+    page.appendChild(start);
+
+    //
+    
     // CONDITIONS 
     fetch('./ressource/languages.json')
     .then((response) => response.json())
@@ -34,27 +91,36 @@ function init(){
         for (var i = 0; i < jsonsize-1; i++) {
             languages[json[i].name] = {"description": json[i].description, "picture": json[i].picture}
         }
-        var conditions = document.createElement("div");
-        conditions.id = "conditions";
-        conditions.style.display = "none";
-        conditions.innerHTML = "<h1>"+json[jsonsize-1].title+"</h1>"+json[jsonsize-1].content;
+        var conditions = newElement("div",{"id":"conditions","style":"display:none","innerHTML":"<h1>"+json[jsonsize-1].title+"</h1>"+json[jsonsize-1].content});
         conditions.appendChild(closebtn("conditions"));
         page.appendChild(conditions);
+        var conditonbtn = newElement("span",{"className": "conditonbtn btn","innerHTML": "Conditions General","style": "zIndex:5"});
+        conditonbtn.addEventListener("click", function(e) { document.getElementById("conditions").style.display = "";document.getElementById("conditions").style.zIndex = "10"});
+        page.appendChild(conditonbtn);
     });
-    var conditonbtn = document.createElement("span");
-    conditonbtn.className = "conditonbtn";
-    conditonbtn.innerHTML = "Conditions General";
-    conditonbtn.addEventListener("click", function(e) { document.getElementById("conditions").style.display = ""; });
-    page.appendChild(conditonbtn);
 
+    // GAME
+    var gamepage = newElement("div",{"id":"gamepage","style":"display:none;zIndex:0"});
+    var zoom = newElement("div",{"className": "zoom"});
+    var chambre = newElement("img",{"src": "ressource/chambre.jpg", "alt": "Image" });
+    zoom.appendChild(chambre);
+    gamepage.appendChild(zoom);
+    page.appendChild(gamepage);
 }
-
-init()
 
 document.addEventListener('keydown', function(event){
 	if(event.key === "Escape"){
         if(document.getElementById("conditions").style.display != "none"){
 		    document.getElementById("conditions").style.display = "none";
+            document.getElementById("conditions").style.zIndex = "0";
         }
 	}
 });
+
+init();
+startanimation();
+var startzoom = newElement("script",{"innerHTML":"zoom();"});
+//var zoommodule = newElement("script",{"src":"ressource/zoom-by-ironex.min.js"});
+
+//document.body.appendChild(zoommodule);
+document.body.appendChild(startzoom);
