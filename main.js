@@ -40,7 +40,7 @@ function isEmpty(obj) {
 }
 
 function newElement(type, object){
-    var element = document.createElement(type);
+    var element = document.createElement(type);    
     for(var i in object){
         element[i] = object[i];
     }
@@ -68,6 +68,8 @@ function init(){
     var text = newElement("p",{"innerHTML": "Cliquer ici pour commencée","className":"centerelement btn start0","style": "color:#FFAAFF;margin-top:5vh;display:none"});
     var text2 = newElement("p",{"innerHTML": "Cliquer ici pour continué","className":"centerelement btn start1","style": "color:#FFAAFF;margin-top:5vh;display:none"});
     var charging = newElement("div",{"style": "margin-top:5vh","className":"neon-bar","innerHTML": "<progress class='bar' value='0' max='100'></progress><span class='bar__value'>0%</span>"});
+    var typingzone = newElement("div",{"id":"typingzone"});
+
     text.addEventListener("click", function(){startgame(0)});
     text2.addEventListener("click", function(){startgame(1)});
 
@@ -81,7 +83,14 @@ function init(){
 
     page.appendChild(start);
 
-    //
+    // TYPINGZONE
+
+    var textzone = newElement('textarea',{'id': 'textarea', 'value':'','placeholder':'Tapé le nom de votre languages'});
+    typingzone.appendChild(textzone);
+    page.appendChild(typingzone);
+
+
+
     
     // CONDITIONS 
     fetch('./ressource/languages.json')

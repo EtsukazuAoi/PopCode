@@ -47,6 +47,30 @@ body::-webkit-scrollbar {
     max-height: 45vh;  
     margin-top: 5vh;
 }
+#typingzone {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 100vh;
+    width: 100vw;
+    background-color: #000000aa;
+}
+#textarea {
+    background-color: #000000aa;
+    color: white;
+    border: transparent;
+    height: 15vh;
+    width: 80vw;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50vh;
+    font-size: 10vh;
+    resize: none;
+    text-align: center;
+    text-transform: uppercase;
+        /* text alignment vertically inside textarea */
+    
+}
 #conditions {
     background-color: rgba(0, 0, 0, 0.75);
     position: absolute;
