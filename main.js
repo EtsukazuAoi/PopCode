@@ -5,6 +5,7 @@ var error = 0;
 var listfound = [];
 var languages = {};
 var mentions = {};
+var regex = /\r\n|\n|\r/gm;
 
 function startanimation(){
     const progressBar = document.querySelector(".bar");
@@ -57,9 +58,35 @@ function startgame(type){
     var game = document.getElementById("gamepage");
     game.style.zIndex = "2";
     game.style.display = "";
+    var typingzone = document.getElementById("typingzone");
+    typingzone.style.display = "";
+    typingzone.zIndex = "5";
 }
 
-function init(){
+function checkpourcentage(value){
+    // var valuearray = value.split("");
+    // for(var key in languages) {
+    //     var keyarray = key.split("");
+    //     var keypercent = 100;
+    //     if(keyarray.length-valuearray.length < keypercent) {
+    //         keypercent = keyarray.length-valuearray.length;
+            
+    //     }
+    //     console.log(pourcentage);
+
+    // }
+}
+
+function typing(value){
+    value = value.replace(regex, '');
+    if(languages[value] !== undefined){
+        console.log(" ✓ "+value);
+    }else{
+        checkpourcentage(value);
+    }    
+}
+
+async function init(){
     // START
     var start = newElement("div",{"id": "start","style": "background-color: rgba(0, 0, 0, 0.75)"/*"zIndex:0;display:none"*/});
     var logo = newElement("img",{"src":"ressource/Logo2.svg","className":"CenteredImage centerelement"});
@@ -68,7 +95,7 @@ function init(){
     var text = newElement("p",{"innerHTML": "Cliquer ici pour commencée","className":"centerelement btn start0","style": "color:#FFAAFF;margin-top:5vh;display:none"});
     var text2 = newElement("p",{"innerHTML": "Cliquer ici pour continué","className":"centerelement btn start1","style": "color:#FFAAFF;margin-top:5vh;display:none"});
     var charging = newElement("div",{"style": "margin-top:5vh","className":"neon-bar","innerHTML": "<progress class='bar' value='0' max='100'></progress><span class='bar__value'>0%</span>"});
-    var typingzone = newElement("div",{"id":"typingzone"});
+    var typingzone = newElement("div",{"id":"typingzone",'style': 'display:none'});
 
     text.addEventListener("click", function(){startgame(0)});
     text2.addEventListener("click", function(){startgame(1)});
@@ -86,34 +113,38 @@ function init(){
     // TYPINGZONE
 
     var textzone = newElement('textarea',{'id': 'textarea', 'value':'','placeholder':'Tapé le nom de votre languages'});
-    typingzone.appendChild(textzone);
-    page.appendChild(typingzone);
-
-
+    var textlabel = newElement('label',{'id': 'textlabel'});
+    textzone.addEventListener('keydown', (event) => {if(event.keyCode === 13){typing(event.target.value);event.target.value = event.target.value.replace(regex,'')}else{event.target.value = event.target.value.replace(regex,'')}});
+    textlabel.appendChild(textzone);
+    typingzone.appendChild(textlabel);
+    // 
 
     
-    // CONDITIONS 
-    fetch('./ressource/languages.json')
+    // CONDITIONS
+    var jsonfile = await fetch('./ressource/languages.json')
     .then((response) => response.json())
     .then((json) => {
-        jsonsize = json.length;
+        return json;
+    });
+        var jsonsize = jsonfile.length;
         for (var i = 0; i < jsonsize-1; i++) {
-            languages[json[i].name] = {"description": json[i].description, "picture": json[i].picture}
+            languages[jsonfile[i].name] = {"description": jsonfile[i].description, "picture": jsonfile[i].picture}
         }
-        var conditions = newElement("div",{"id":"conditions","style":"display:none","innerHTML":"<h1>"+json[jsonsize-1].title+"</h1>"+json[jsonsize-1].content});
+        var conditions = newElement("div",{"id":"conditions","style":"display:none","innerHTML":"<h1>"+jsonfile[jsonsize-1].title+"</h1>"+jsonfile[jsonsize-1].content});
         conditions.appendChild(closebtn("conditions"));
         page.appendChild(conditions);
         var conditonbtn = newElement("span",{"className": "conditonbtn btn","innerHTML": "Conditions General","style": "zIndex:5"});
         conditonbtn.addEventListener("click", function(e) { document.getElementById("conditions").style.display = "";document.getElementById("conditions").style.zIndex = "10"});
         page.appendChild(conditonbtn);
-    });
-
+    /*});*/
+    // startanimation();
     // GAME
     var gamepage = newElement("div",{"id":"gamepage","style":"display:none;zIndex:0"});
     var zoom = newElement("div",{"className": "zoom"});
     var chambre = newElement("img",{"src": "ressource/chambre.jpg", "alt": "Image" });
     zoom.appendChild(chambre);
     gamepage.appendChild(zoom);
+    gamepage.appendChild(typingzone);
     page.appendChild(gamepage);
 }
 
