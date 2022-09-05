@@ -65,10 +65,10 @@ body::-webkit-scrollbar {
     top: 50vh;
   }
   
-textarea {
+#textarea {
     color: white;
     position: absolute;
-    top: 50%;
+    top: 10%;
     left: 0;
     width: 100%;
     resize: none;
@@ -81,7 +81,7 @@ textarea {
     font-weight: bold;
     font-family: 'Roboto', sans-serif;
 }
-textarea:focus {
+#textarea:focus {
     outline: 0;
 }
 
@@ -100,6 +100,7 @@ textarea:focus {
     scrollbar-width: none; /* for Firefox */
     height: 100vh;
     font-family: GothanLight;
+    z-index: 15;
 }
 #conditions p {
     max-width: 50%;
@@ -118,6 +119,7 @@ ul {
     list-style: none;
 }
 .conditonbtn {
+    z-index: 10;
     color: white;
     position: absolute;
     bottom: 3vh;

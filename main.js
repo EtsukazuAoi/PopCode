@@ -1,7 +1,14 @@
+/// CONFIGURATION
+
+var maxerrors = 3; // nombre d'erreur accepter avant defaite
+var texttolerance = 80; // valeur en pourcentage pour que le mot soit accepter compter comme erreur
+
+/// DO NOT EDIT THIS
 var page = document.getElementById('mainpage');
 page.innerHTML += '<div class="autherdevice">Ce Site web n\'a pas eté concusses pour c\'ettes apparailes</div>';
 var gamesave = JSON.parse(localStorage.getItem("gamesave") || "{}");
 var error = 0;
+var gamestate = 0;
 var listfound = [];
 var languages = {};
 var mentions = {};
@@ -58,32 +65,84 @@ function startgame(type){
     var game = document.getElementById("gamepage");
     game.style.zIndex = "2";
     game.style.display = "";
-    var typingzone = document.getElementById("typingzone");
-    typingzone.style.display = "";
-    typingzone.zIndex = "5";
+    gamestate = 1;
 }
 
 function checkpourcentage(value){
-    // var valuearray = value.split("");
-    // for(var key in languages) {
-    //     var keyarray = key.split("");
-    //     var keypercent = 100;
-    //     if(keyarray.length-valuearray.length < keypercent) {
-    //         keypercent = keyarray.length-valuearray.length;
-            
-    //     }
-    //     console.log(pourcentage);
+    v = value.split("");
+    var pourcentage = 0;
+    var keyselected = null;
+    for(var key in languages){
+        k = key.split("");
+        point = 0;
+        tpourcentage = 0;
+        if(k.length>v.length){
+            point = k.length;
+            for(var i = 0; i < k.length; i++){
+                if(v[i] != undefined){
+                    if(k[i].toLowerCase() != v[i].toLowerCase()){
+                        point = point-1;
+                    }
+                }else{
+                    point = point-1;
+                }
+                
+            }
+            tpourcentage = point*100/k.length;
+        }else if(k.length<v.length){
+            point = v.length;
+            for(var i = 0; i < v.length; i++){
+                if(k[i] != undefined){
+                    if(k[i].toLowerCase() != v[i].toLowerCase()){
+                        point = point-1;
+                    }
+                }else{
+                    point = point-1;
+                }
+                
+            }
+            tpourcentage = point*100/v.length;
+        }else if(k.length==v.length){
+            point = k.length;
+            for(var i = 0; i < v.length; i++){
+                if(k[i].toLowerCase() != v[i].toLowerCase()){
+                    point = point-1;
+                }                
+            }
+            tpourcentage = point*100/v.length;
+        }
+        console.log("key: " + key);
+        console.log("pourcentage: " + tpourcentage);
+        console.log("point: " + point);
 
-    // }
+        if(tpourcentage > pourcentage){
+            pourcentage = tpourcentage;
+            keyselected = key;
+        }
+    }
+    console.log("key selected: " + keyselected);
+    console.log("pourcentage max: " + pourcentage);
+    if(texttolerance <= pourcentage){
+        return keyselected;
+    }
+
+    return -1;
 }
 
 function typing(value){
-    value = value.replace(regex, '');
+    //value = value.replace(regex, '');
     if(languages[value] !== undefined){
         console.log(" ✓ "+value);
+    }else if(value.length >= 3){
+        var langselected = checkpourcentage(value);
+        if(langselected != -1){
+            console.log(" ✓ "+langselected);
+        }else{
+            console.log(" ✕ "+value);
+        }
     }else{
-        checkpourcentage(value);
-    }    
+        console.log(" ✕ "+value);
+    }
 }
 
 async function init(){
@@ -112,10 +171,10 @@ async function init(){
 
     // TYPINGZONE
 
-    var textzone = newElement('textarea',{'id': 'textarea', 'value':'','placeholder':'Tapé le nom de votre languages'});
-    var textlabel = newElement('label',{'id': 'textlabel'});
-    textzone.addEventListener('keydown', (event) => {if(event.keyCode === 13){typing(event.target.value);event.target.value = event.target.value.replace(regex,'')}else{event.target.value = event.target.value.replace(regex,'')}});
+    var textzone = newElement('p',{'id': 'textarea'});
+    var textlabel = newElement('label',{'id': 'textlabel','innerHTML':'Tapé le nom de votre languages'});
     textlabel.appendChild(textzone);
+    textlabel.innerHTML += " puis valider en appuyant sur la touche enter"
     typingzone.appendChild(textlabel);
     // 
 
@@ -133,8 +192,8 @@ async function init(){
         var conditions = newElement("div",{"id":"conditions","style":"display:none","innerHTML":"<h1>"+jsonfile[jsonsize-1].title+"</h1>"+jsonfile[jsonsize-1].content});
         conditions.appendChild(closebtn("conditions"));
         page.appendChild(conditions);
-        var conditonbtn = newElement("span",{"className": "conditonbtn btn","innerHTML": "Conditions General","style": "zIndex:5"});
-        conditonbtn.addEventListener("click", function(e) { document.getElementById("conditions").style.display = "";document.getElementById("conditions").style.zIndex = "10"});
+        var conditonbtn = newElement("span",{"className": "conditonbtn btn","innerHTML": "Conditions General"});
+        conditonbtn.addEventListener("click", function(e) { document.getElementById("conditions").style.display = ""});
         page.appendChild(conditonbtn);
     /*});*/
     // startanimation();
@@ -148,19 +207,43 @@ async function init(){
     page.appendChild(gamepage);
 }
 
-document.addEventListener('keydown', function(event){
-	if(event.key === "Escape"){
-        if(document.getElementById("conditions").style.display != "none"){
-		    document.getElementById("conditions").style.display = "none";
-            document.getElementById("conditions").style.zIndex = "0";
-        }
-	}
-});
-
 init();
 startanimation();
 var startzoom = newElement("script",{"innerHTML":"zoom();"});
 //var zoommodule = newElement("script",{"src":"ressource/zoom-by-ironex.min.js"});
-
 //document.body.appendChild(zoommodule);
 document.body.appendChild(startzoom);
+
+document.addEventListener("keydown", (event) => {
+    console.log(event.key);
+    var keylenght = event.key.split("").length;
+    var typingzone = document.getElementById("typingzone");
+    if(gamestate == 1){
+        if(event.key.match(/^[a-z\_\-\:,.0-9]{1}/i) && keylenght == 1){
+            if(typingzone.style.display != ""){
+                document.getElementById("textarea").innerHTML = event.key;
+                typingzone.style.display = "";
+            }else{
+                document.getElementById("textarea").innerHTML += event.key;
+            }
+        }else if(event.code == "Space" && typingzone.style.display == ""){
+            
+            document.getElementById("textarea").innerHTML += "-";
+                
+        }else if(event.key.match("Backspace") && typingzone.style.display == ""){
+            var value = document.getElementById("textarea").innerHTML;
+            document.getElementById("textarea").innerHTML = value.replace(/.$/, '');
+        }else if(event.key.match("Enter") && typingzone.style.display == ""){
+            var value = document.getElementById("textarea").innerHTML;
+            typing(value);
+            typingzone.style.display = "none";
+        }else if(event.key.match("Escape")){
+            if(document.getElementById("conditions").style.display != "none"){
+                document.getElementById("conditions").style.display = "none";
+                document.getElementById("conditions").style.zIndex = "0";
+            }else if(typingzone.style.display != "none"){
+                typingzone.style.display = "none";
+            }
+        }
+    }
+});
