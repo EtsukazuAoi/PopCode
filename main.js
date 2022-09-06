@@ -34,10 +34,20 @@ function startanimation(){
         value += 1;
         progressBar.value = value;
         progressBarValue.innerText = value + '%';
-        text.innerHTML = parseInt(value/100*30);
+        text.innerHTML = parseInt(value/100*Object.keys(languages).length);
     }
-    }, 80);
+    }, 10);
 }
+
+function gamescorevisual(){
+    // "error_false"
+    var error = document.getElementById("error");
+    var score = document.getElementById("score").innerHTML;
+    score = score.replace("$1", 0);
+    score = score.replace("$2", Object.keys(languages).length);
+    document.getElementById("score").innerHTML = score;
+}
+
 function hide(event){
     event.target.parentNode.style.display = "none";
     event.target.parentNode.style.zIndex = "0";
@@ -66,6 +76,7 @@ function startgame(type){
     game.style.zIndex = "2";
     game.style.display = "";
     gamestate = 1;
+    gamescorevisual();
 }
 
 function checkpourcentage(value){
@@ -202,14 +213,29 @@ async function init(){
     var zoom = newElement("div",{"className": "zoom"});
     var chambre = newElement("img",{"src": "ressource/chambre.jpg", "alt": "Image" });
     zoom.appendChild(chambre);
-    
-    gamepage.appendChild(newElement("img",{"className":"logoImg","src": "ressource/Logo.svg", "alt": "Logo"}));
+
+    var scores = newElement("div",{"id":"scores"});
+    var stext = newElement("p");
+    var score = newElement("div",{"id":"score","innerHTML":" $1 / $2"});
+    var sx = newElement("div",{"id":"error"});
+    for(var i=0;i< maxerrors;i++){
+        var scoreX = newElement("span", {"innerHTML":" ✖ "});
+        sx.appendChild(scoreX);
+    }
+    scores.appendChild(stext);
+    scores.appendChild(score);
+    scores.appendChild(sx);    
+
     gamepage.appendChild(zoom);
+    gamepage.appendChild(newElement("img",{"className":"logoImg","src": "ressource/Logo.svg", "alt": "Logo"}));
+    gamepage.appendChild(scores);
     gamepage.appendChild(typingzone);
     page.appendChild(gamepage);
 
     var startzoom = newElement("script",{"innerHTML":"zoom();"});
     document.body.appendChild(startzoom);
+    gamescorevisual();
+
 }
 
 init();
