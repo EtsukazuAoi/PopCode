@@ -7,7 +7,7 @@ var texttolerance = 80; // valeur en pourcentage pour que le mot soit accepter c
 var page = document.getElementById('mainpage');
 page.innerHTML += '<div class="autherdevice">Ce Site web n\'a pas eté concusses pour c\'ettes apparailes</div>';
 var gamesave = JSON.parse(localStorage.getItem("gamesave") || "{}");
-var erreur = 2;
+var erreur = 0;
 var gamestate = 0;
 var listfound = [];
 var languages = {};
@@ -42,10 +42,7 @@ function startanimation(){
 function gamescorevisual(){
     // "error_false"
     var error = document.getElementById("error").children;
-    var score = document.getElementById("score").innerHTML;
-    score = score.replace("$1", 0);
-    score = score.replace("$2", Object.keys(languages).length);
-    document.getElementById("score").innerHTML = score;
+    document.getElementById("score").innerHTML = listfound.length+" / "+Object.keys(languages).length;
     for(var i=0; i<error.length; i++){
         if(i<erreur){
             error[i].className = "error_true";
@@ -130,17 +127,17 @@ function checkpourcentage(value){
             }
             tpourcentage = point*100/v.length;
         }
-        console.log("key: " + key);
-        console.log("pourcentage: " + tpourcentage);
-        console.log("point: " + point);
+        // console.log("key: " + key);
+        // console.log("pourcentage: " + tpourcentage);
+        // console.log("point: " + point);
 
         if(tpourcentage > pourcentage){
             pourcentage = tpourcentage;
             keyselected = key;
         }
     }
-    console.log("key selected: " + keyselected);
-    console.log("pourcentage max: " + pourcentage);
+    // console.log("key selected: " + keyselected);
+    // console.log("pourcentage max: " + pourcentage);
     if(texttolerance <= pourcentage){
         return keyselected;
     }
@@ -150,18 +147,24 @@ function checkpourcentage(value){
 
 function typing(value){
     //value = value.replace(regex, '');
-    if(languages[value] !== undefined){
+    console.log("test: "+listfound.find(element => element == value));
+    if(languages[value] !== undefined && listfound.find(element => element == value) == undefined){
         console.log(" ✓ "+value);
+        listfound.push(value);
     }else if(value.length >= 3){
         var langselected = checkpourcentage(value);
-        if(langselected != -1){
+        if(langselected != -1 && listfound.find(element => element == langselected) == undefined){
             console.log(" ✓ "+langselected);
+            listfound.push(langselected);
         }else{
             console.log(" ✕ "+value);
+            erreur ++;
         }
     }else{
         console.log(" ✕ "+value);
+        erreur ++;
     }
+    gamescorevisual();
 }
 
 async function init(){
@@ -224,7 +227,7 @@ async function init(){
 
     var scores = newElement("div",{"id":"scores"});
     var stext = newElement("p");
-    var score = newElement("div",{"id":"score","innerHTML":" $1 / $2"});
+    var score = newElement("div",{"id":"score","innerHTML":" 0 / 0"});
     var sx = newElement("div",{"id":"error"});
     for(var i=0;i< maxerrors;i++){
         var scoreX = newElement("span", {"innerHTML":" ✖ "});
@@ -252,11 +255,11 @@ startanimation();
 //document.body.appendChild(zoommodule);
 
 document.addEventListener("keydown", (event) => {
-    console.log(event.key);
+    console.log("KEY: "+event.key);
     var keylenght = event.key.split("").length;
     var typingzone = document.getElementById("typingzone");
     if(gamestate == 1){
-        if(event.key.match(/^[a-z\_\-\:,.0-9]{1}/i) && keylenght == 1){
+        if(event.key.match(/^[a-z\_\-\:#+,.0-9]{1}/i) && keylenght == 1){
             if(typingzone.style.display != ""){
                 document.getElementById("textarea").innerHTML = event.key;
                 typingzone.style.display = "";
