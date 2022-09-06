@@ -7,7 +7,7 @@ var texttolerance = 80; // valeur en pourcentage pour que le mot soit accepter c
 var page = document.getElementById('mainpage');
 page.innerHTML += '<div class="autherdevice">Ce Site web n\'a pas eté concusses pour c\'ettes apparailes</div>';
 var gamesave = JSON.parse(localStorage.getItem("gamesave") || "{}");
-var error = 0;
+var erreur = 2;
 var gamestate = 0;
 var listfound = [];
 var languages = {};
@@ -41,11 +41,19 @@ function startanimation(){
 
 function gamescorevisual(){
     // "error_false"
-    var error = document.getElementById("error");
+    var error = document.getElementById("error").children;
     var score = document.getElementById("score").innerHTML;
     score = score.replace("$1", 0);
     score = score.replace("$2", Object.keys(languages).length);
     document.getElementById("score").innerHTML = score;
+    for(var i=0; i<error.length; i++){
+        if(i<erreur){
+            error[i].className = "error_true";
+        }else{
+            error[i].className = "error_false";
+
+        }
+    }
 }
 
 function hide(event){
