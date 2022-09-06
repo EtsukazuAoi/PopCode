@@ -197,6 +197,14 @@ ul {
     margin-left: 0.5em;
   }
 
+  .logoImg {
+    position: absolute;
+    top: 5vh;
+    right: 5vw;
+    z-index: 1;
+    height: 25vh;
+  }
+
 @media screen and (-webkit-min-device-pixel-ratio: 2){
     .autherdevice {
       display: block;

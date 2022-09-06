@@ -202,17 +202,20 @@ async function init(){
     var zoom = newElement("div",{"className": "zoom"});
     var chambre = newElement("img",{"src": "ressource/chambre.jpg", "alt": "Image" });
     zoom.appendChild(chambre);
+    
+    gamepage.appendChild(newElement("img",{"className":"logoImg","src": "ressource/Logo.svg", "alt": "Logo"}));
     gamepage.appendChild(zoom);
     gamepage.appendChild(typingzone);
     page.appendChild(gamepage);
+
+    var startzoom = newElement("script",{"innerHTML":"zoom();"});
+    document.body.appendChild(startzoom);
 }
 
 init();
 startanimation();
-var startzoom = newElement("script",{"innerHTML":"zoom();"});
 //var zoommodule = newElement("script",{"src":"ressource/zoom-by-ironex.min.js"});
 //document.body.appendChild(zoommodule);
-document.body.appendChild(startzoom);
 
 document.addEventListener("keydown", (event) => {
     console.log(event.key);
