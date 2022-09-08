@@ -276,6 +276,13 @@ ul {
     width: 45vw;
   }
 
+  .endpage {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    z-index: 1;
+  }
 @media screen and (-webkit-min-device-pixel-ratio: 2){
     .autherdevice {
       display: block;
