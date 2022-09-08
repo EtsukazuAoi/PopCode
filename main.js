@@ -70,7 +70,7 @@ function newElement(type, object){
     return element;
 }
 
-function closebtn(name) {
+function closebtn() {
     var closebtn = newElement("span", {"className": "close btn","innerHTML": "&times;"});
     closebtn.addEventListener("click", hide);
     return closebtn;
@@ -145,16 +145,25 @@ function checkpourcentage(value){
     return -1;
 }
 
+function loadmodal(selectLang){
+    document.getElementById("modalgame_Title").innerHTML = languages[selectLang].title;
+    document.getElementById("modalgame_Img").src = languages[selectLang].picture;
+    document.getElementById("modalgame_Content").innerHTML = languages[selectLang].description;
+    document.getElementById("modalgame").style.display = "";
+}
+
 function typing(value){
     //value = value.replace(regex, '');
     console.log("test: "+listfound.find(element => element == value));
     if(languages[value] !== undefined && listfound.find(element => element == value) == undefined){
         console.log(" ✓ "+value);
+        loadmodal(value);
         listfound.push(value);
     }else if(value.length >= 3){
         var langselected = checkpourcentage(value);
         if(langselected != -1 && listfound.find(element => element == langselected) == undefined){
             console.log(" ✓ "+langselected);
+            loadmodal(langselected);
             listfound.push(langselected);
         }else{
             console.log(" ✕ "+value);
@@ -177,6 +186,7 @@ async function init(){
     var text2 = newElement("p",{"innerHTML": "Cliquer ici pour continué","className":"centerelement btn start1","style": "color:#FFAAFF;margin-top:5vh;display:none"});
     var charging = newElement("div",{"style": "margin-top:5vh","className":"neon-bar","innerHTML": "<progress class='bar' value='0' max='100'></progress><span class='bar__value'>0%</span>"});
     var typingzone = newElement("div",{"id":"typingzone",'style': 'display:none'});
+    var modalgame = newElement("div",{"id":"modalgame",'style': 'display:none'});
 
     text.addEventListener("click", function(){startgame(0)});
     text2.addEventListener("click", function(){startgame(1)});
@@ -190,6 +200,16 @@ async function init(){
     start.appendChild(charging);
 
     page.appendChild(start);
+
+    // Modal Ingame
+
+    modalgame.appendChild(closebtn());
+    modalgame.appendChild(newElement("h1",{"id":"modalgame_Title"}));
+    var div = newElement("div",{"className":"divgame"});
+    div.appendChild(newElement("img",{"id":"modalgame_Img","src":""}));
+    div.appendChild(newElement("p",{"id":"modalgame_Content"}));
+    modalgame.appendChild(div);
+    page.appendChild(modalgame);
 
     // TYPINGZONE
 
@@ -209,10 +229,10 @@ async function init(){
     });
         var jsonsize = jsonfile.length;
         for (var i = 0; i < jsonsize-1; i++) {
-            languages[jsonfile[i].name] = {"description": jsonfile[i].description, "picture": jsonfile[i].picture}
+            languages[jsonfile[i].name] = {"title": jsonfile[i].name,"description": jsonfile[i].description, "picture": jsonfile[i].picture};
         }
         var conditions = newElement("div",{"id":"conditions","style":"display:none","innerHTML":"<h1>"+jsonfile[jsonsize-1].title+"</h1>"+jsonfile[jsonsize-1].content});
-        conditions.appendChild(closebtn("conditions"));
+        conditions.appendChild(closebtn());
         page.appendChild(conditions);
         var conditonbtn = newElement("span",{"className": "conditonbtn btn","innerHTML": "Conditions General"});
         conditonbtn.addEventListener("click", function(e) { document.getElementById("conditions").style.display = ""});
@@ -277,13 +297,15 @@ document.addEventListener("keydown", (event) => {
             var value = document.getElementById("textarea").innerHTML;
             typing(value);
             typingzone.style.display = "none";
-        }else if(event.key.match("Escape")){
-            if(document.getElementById("conditions").style.display != "none"){
-                document.getElementById("conditions").style.display = "none";
-                document.getElementById("conditions").style.zIndex = "0";
-            }else if(typingzone.style.display != "none"){
-                typingzone.style.display = "none";
-            }
+        }
+    }
+    if(event.key.match("Escape")){
+        if(document.getElementById("conditions").style.display != "none"){
+            document.getElementById("conditions").style.display = "none";
+        }else if(typingzone.style.display != "none"){
+            typingzone.style.display = "none";
+        }else if(document.getElementById("modalgame").style.display != "none"){
+            document.getElementById("modalgame").style.display = "none";
         }
     }
 });
