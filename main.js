@@ -47,7 +47,6 @@ function gamescorevisual(){
             error[i].className = "error_true";
         }else{
             error[i].className = "error_false";
-
         }
     }
 }
@@ -131,6 +130,7 @@ function checkpourcentage(value){
             keyselected = key;
         }
     }
+    console.log(pourcentage);
     if(texttolerance <= pourcentage){
         return keyselected;
     }

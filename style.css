@@ -242,7 +242,7 @@ ul {
   }
 
   .error_true {
-    color: red;
+    color: #0AEFF7;
   }
   .error_false {
     color: gray;
