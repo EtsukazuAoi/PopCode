@@ -54,7 +54,6 @@ function gamescorevisual(){
 
 function hide(event){
     event.target.parentNode.style.display = "none";
-    event.target.parentNode.style.zIndex = "0";
 }
 
 function isEmpty(obj) {
@@ -139,6 +138,19 @@ function checkpourcentage(value){
     return -1;
 }
 
+function showlistfound(){
+    document.getElementById("modalgame_Title").innerHTML = "Liste des languages trouvées";
+    var content = newElement("div",{"className": "listfound"});
+    content.appendChild(newElement("h1",{"innerHTML": listfound.length+"/"+Object.keys(languages).length}));
+    for(var i=0; i<listfound.length; i++){
+        content.appendChild(newElement("span",{"innerHTML": listfound[i]}));
+    }
+    document.getElementById("modalgame_Content").innerHTML = "";
+    document.getElementById("modalgame_Content").appendChild(content);
+    document.getElementById("modalgame_Img").src = "";
+    document.getElementById("modalgame").style.display = "";
+}
+
 function loadmodal(selectLang){
     document.getElementById("modalgame_Title").innerHTML = languages[selectLang].title;
     document.getElementById("modalgame_Img").src = languages[selectLang].picture;
@@ -181,6 +193,7 @@ async function init(){
     var start = newElement("div",{"id": "start","style": "background-color: rgba(0, 0, 0, 0.75)"/*"zIndex:0;display:none"*/});
     var logo = newElement("img",{"src":"ressource/Logo2.svg","className":"CenteredImage centerelement"});
     var logolouse = newElement("img",{"src":"ressource/Logo2.svg","className":"CenteredImage centerelement"});
+    var logowin = newElement("img",{"src":"ressource/Logo2.svg","className":"CenteredImage centerelement"});
     var text0 = newElement("p",{"className":"centerelement langcount","style": "font-size:150px;color:#0AEFF7;background: -webkit-linear-gradient(#057C80, #0AEFF7);background-clip: border-box; -webkit-background-clip: text; -webkit-text-fill-color: transparent","innerHTML": "0"});
     var text1 = newElement("p",{"className":"centerelement","style": "font-size:15px;font-family:GothanLight","innerHTML": "Références de<br>langages de programmation<br>à retrouver"});
     var text2 = newElement("p",{"innerHTML": "Cliquer ici pour commencée","className":"centerelement btn start0","style": "color:#FFAAFF;margin-top:5vh;display:none"});
@@ -188,10 +201,12 @@ async function init(){
     var text4 = newElement("p",{"innerHTML": "Cliquer ici pour retourne a l'acceuil","className":"centerelement btn home", "style": "color:#FFAAFF;margin-top:5vh"});
     var text5 = newElement("p",{"id": "looseresult", "className":"centerelement home", "style": "font-size:150px;color:#0AEFF7;background: -webkit-linear-gradient(#057C80, #0AEFF7);background-clip: border-box; -webkit-background-clip: text; -webkit-text-fill-color: transparent"});
     var text6 = newElement("p",{"innerHTML": "Votre resultat","className":"centerelement home", "style": "color:#FFAAFF;margin-top:8vh"});
+    var text7 = newElement("p",{"innerHTML": ""});
     var charging = newElement("div",{"style": "margin-top:5vh","className":"neon-bar","innerHTML": "<progress class='bar' value='0' max='100'></progress><span class='bar__value'>0%</span>"});
     var typingzone = newElement("div",{"id":"typingzone",'style': 'display:none'});
     var modalgame = newElement("div",{"id":"modalgame",'style': 'display:none'});
     var losepage = newElement("div",{"id":"losepage",'style': 'display:none',"className":"endpage"});
+    var winpage = newElement("div",{"id":"winpage",'style':'display:none',"className":"endpage"})
 
     text2.addEventListener("click", function(){startgame(0)});
     text3.addEventListener("click", function(){startgame(1)});
@@ -273,11 +288,15 @@ async function init(){
     }
     scores.appendChild(stext);
     scores.appendChild(score);
-    scores.appendChild(sx);    
+    scores.appendChild(sx);
+
+    var foundbtn = newElement("span",{"className": "btn foundbtn","innerHTML":"<img src=\"ressource/search.svg\" alt=\"Search incon\"> LANGAGES TROUVÉS"});
+    foundbtn.addEventListener("click", function(e) { showlistfound(); });
 
     gamepage.appendChild(zoom);
     gamepage.appendChild(newElement("img",{"className":"logoImg","src": "ressource/Logo.svg", "alt": "Logo"}));
     gamepage.appendChild(scores);
+    gamepage.appendChild(foundbtn);
     gamepage.appendChild(typingzone);
     page.appendChild(gamepage);
 
@@ -296,7 +315,7 @@ document.addEventListener("keydown", (event) => {
     console.log("KEY: "+event.key);
     var keylenght = event.key.split("").length;
     var typingzone = document.getElementById("typingzone");
-    if(gamestate == 1){
+    if(gamestate == 1 && document.getElementById("modalgame").style.display == "none"){
         if(event.key.match(/^[a-z\_\-\:#+,.0-9]{1}/i) && keylenght == 1){
             if(typingzone.style.display != ""){
                 document.getElementById("textarea").innerHTML = event.key;

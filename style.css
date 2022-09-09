@@ -253,9 +253,8 @@ ul {
     position: absolute;
     top: 0px;
     left: 0px;
-    width: 100vw;
+    width: 100%;
     color: white;
-    padding: 10px;
     text-align: center;
     overflow: auto;
     -ms-overflow-style: none; /* for Internet Explorer, Edge */
@@ -273,7 +272,6 @@ ul {
 
   .divgame p {
     padding: 10px;
-    width: 45vw;
   }
 
   .endpage {
@@ -283,6 +281,28 @@ ul {
     width: 100%;
     z-index: 1;
   }
+
+  .foundbtn {
+    position: absolute;
+    bottom: 2vh;
+    left: 2vw;
+    border: 2px solid white;
+    padding: 10px;
+  }
+
+  .listfound {
+    position: relative;
+    left: 45vw;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    flex-direction: column;
+  }
+  .listfound span {
+    font-size: 5vh;
+    padding-top: 5px;
+  }
+
 @media screen and (-webkit-min-device-pixel-ratio: 2){
     .autherdevice {
       display: block;
