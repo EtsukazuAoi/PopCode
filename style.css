@@ -128,7 +128,10 @@ ul {
 
 .btn {
     cursor: pointer;
-    margin-bottom: -2vh;
+}
+
+#start .btn {
+  margin-bottom: -2vh;
 }
 
 #gamepage {

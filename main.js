@@ -26,7 +26,7 @@ function startanimation(){
         document.querySelector(".neon-bar").style.display = 'none';
         document.querySelector(".start0").style.display = '';
         if(!isEmpty(gamesave)){
-            if(gamesave["erreur"] != 0 || gamesave["listfound"] != []){
+            if(gamesave["erreur"] != 0 || gamesave["listfound"].length != 0) {
                 document.querySelector(".start1").style.display = '';
             }
         }
@@ -153,7 +153,12 @@ function showlistfound(){
     var content = newElement("div",{"className": "listfound"});
     content.appendChild(newElement("h1",{"innerHTML": listfound.length+"/"+Object.keys(languages).length}));
     for(var i=0; i<listfound.length; i++){
-        content.appendChild(newElement("span",{"innerHTML": listfound[i]}));
+        var selectlang = listfound[i];
+        var lang = newElement("span",{"className": "btn","innerHTML": selectlang});
+        lang.addEventListener("click", function(){
+            loadmodal(selectlang);
+        });
+        content.appendChild(lang);
     }
     document.getElementById("modalgame_Content").innerHTML = "";
     document.getElementById("modalgame_Content").appendChild(content);
@@ -186,11 +191,11 @@ function typing(value){
             console.log(" ✓ "+langselected);
             loadmodal(langselected);
             listfound.push(langselected);
-        }else{
+        }else if(listfound.find(element => element == value) == undefined){
             console.log(" ✕ "+value);
             erreur ++;
         }
-    }else{
+    }else if(listfound.find(element => element == value) == undefined){
         console.log(" ✕ "+value);
         erreur ++;
     }
@@ -246,7 +251,7 @@ async function init(){
         document.getElementById("start").style.display = '';
     });
     text9.addEventListener("click", function(){
-        document.getElementById("losepage").style.display = 'none';
+        document.getElementById("winpage").style.display = 'none';
         document.getElementById("gamepage").style.display = 'none';
         document.getElementById("start").style.display = '';
     });
