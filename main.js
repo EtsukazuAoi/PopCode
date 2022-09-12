@@ -26,7 +26,9 @@ function startanimation(){
         document.querySelector(".neon-bar").style.display = 'none';
         document.querySelector(".start0").style.display = '';
         if(!isEmpty(gamesave)){
-            document.querySelector(".start1").style.display = '';
+            if(gamesave["erreur"] != 0 || gamesave["listfound"] != []){
+                document.querySelector(".start1").style.display = '';
+            }
         }
         document.getElementById("start").style.backgroundColor = "";
     } else {
@@ -166,6 +168,13 @@ function loadmodal(selectLang){
     document.getElementById("modalgame").style.display = "";
 }
 
+function save(){
+    var save = {};
+    save["erreur"] = erreur;
+    save["listfound"] = listfound;
+    localStorage.setItem("gamesave",JSON.stringify(save));
+}
+
 function typing(value){
     if(languages[value] !== undefined && listfound.find(element => element == value) == undefined){
         console.log(" ✓ "+value);
@@ -190,8 +199,21 @@ function typing(value){
         document.getElementById("start").style.display = "none";
         document.getElementById("losepage").style.display = "";
         document.getElementById("looseresult").innerHTML = listfound.length+"/"+Object.keys(languages).length;
+        document.querySelector(".start1").style.display = 'none';
+        erreur=0;
+        listfound=[];
+        gamestate=0;
+    }else if(listfound.length == Object.keys(languages).length) {
+        document.getElementById("gamepage").style.display = "none";
+        document.getElementById("start").style.display = "none";
+        document.getElementById("winpage").style.display = "";
+        document.querySelector(".start1").style.display = 'none';
+        erreur=0;
+        listfound=[];
+        gamestate=0;
     }
     gamescorevisual();
+    save();
 }
 
 async function init(){
@@ -222,17 +244,11 @@ async function init(){
         document.getElementById("losepage").style.display = 'none';
         document.getElementById("gamepage").style.display = 'none';
         document.getElementById("start").style.display = '';
-        erreur=0;
-        listfound=[];
-        gamestate=0;
     });
     text9.addEventListener("click", function(){
         document.getElementById("losepage").style.display = 'none';
         document.getElementById("gamepage").style.display = 'none';
         document.getElementById("start").style.display = '';
-        erreur=0;
-        listfound=[];
-        gamestate=0;
     });
 
     start.appendChild(logo);
