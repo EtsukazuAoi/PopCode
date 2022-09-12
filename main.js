@@ -78,6 +78,14 @@ function startgame(type){
     game.style.zIndex = "2";
     game.style.display = "";
     gamestate = 1;
+    if(type == 1){
+        erreur = gamesave["erreur"];
+        listfound = gamesave["listfound"];
+    }else{
+        erreur = 0;
+        listfound = [];
+    }
+    
     gamescorevisual();
 }
 
@@ -159,8 +167,6 @@ function loadmodal(selectLang){
 }
 
 function typing(value){
-    //value = value.replace(regex, '');
-    console.log("test: "+listfound.find(element => element == value));
     if(languages[value] !== undefined && listfound.find(element => element == value) == undefined){
         console.log(" ✓ "+value);
         loadmodal(value);
@@ -198,10 +204,12 @@ async function init(){
     var text1 = newElement("p",{"className":"centerelement","style": "font-size:15px;font-family:GothanLight","innerHTML": "Références de<br>langages de programmation<br>à retrouver"});
     var text2 = newElement("p",{"innerHTML": "Cliquer ici pour commencée","className":"centerelement btn start0","style": "color:#FFAAFF;margin-top:5vh;display:none"});
     var text3 = newElement("p",{"innerHTML": "Cliquer ici pour continué","className":"centerelement btn start1","style": "color:#FFAAFF;margin-top:5vh;display:none"});
-    var text4 = newElement("p",{"innerHTML": "Cliquer ici pour retourne a l'acceuil","className":"centerelement btn home", "style": "color:#FFAAFF;margin-top:5vh"});
-    var text5 = newElement("p",{"id": "looseresult", "className":"centerelement home", "style": "font-size:150px;color:#0AEFF7;background: -webkit-linear-gradient(#057C80, #0AEFF7);background-clip: border-box; -webkit-background-clip: text; -webkit-text-fill-color: transparent"});
-    var text6 = newElement("p",{"innerHTML": "Votre resultat","className":"centerelement home", "style": "color:#FFAAFF;margin-top:8vh"});
-    var text7 = newElement("p",{"innerHTML": ""});
+    var text4 = newElement("p",{"innerHTML": "Cliquer ici pour retourné a l'acceuil","className":"centerelement btn home", "style": "color:#FFAAFF;margin-top:5vh"});
+    var text5 = newElement("p",{"innerHTML": "Perdu","className":"centerelement home","style": "position:relative;bottom:5vh;margin-bottom:-10vh;color:#F00;font-size:5em"});
+    var text6 = newElement("p",{"id": "looseresult", "className":"centerelement home", "style": "font-size:8em;color:#0AEFF7;background: -webkit-linear-gradient(#057C80, #0AEFF7);background-clip: border-box; -webkit-background-clip: text; -webkit-text-fill-color: transparent"});
+    var text7 = newElement("p",{"innerHTML": "Votre resultat","className":"centerelement home", "style": "color:#FFAAFF;margin-top:8vh"});
+    var text8 = newElement("p",{"innerHTML": "Bravo","className":"centerelement home", "style": "/*position:relative;bottom:5vh;margin-bottom:-10vh;*/color:#0F0;font-size:5em"});
+    var text9 = newElement("p",{"innerHTML":"Cliquer ici pour retourné a l'acceuil","className":"centerelement btn home", "style":"color:#FFAAFF;margin-top:5vh"});
     var charging = newElement("div",{"style": "margin-top:5vh","className":"neon-bar","innerHTML": "<progress class='bar' value='0' max='100'></progress><span class='bar__value'>0%</span>"});
     var typingzone = newElement("div",{"id":"typingzone",'style': 'display:none'});
     var modalgame = newElement("div",{"id":"modalgame",'style': 'display:none'});
@@ -218,6 +226,14 @@ async function init(){
         listfound=[];
         gamestate=0;
     });
+    text9.addEventListener("click", function(){
+        document.getElementById("losepage").style.display = 'none';
+        document.getElementById("gamepage").style.display = 'none';
+        document.getElementById("start").style.display = '';
+        erreur=0;
+        listfound=[];
+        gamestate=0;
+    });
 
     start.appendChild(logo);
     start.appendChild(text0);
@@ -227,12 +243,18 @@ async function init(){
     start.appendChild(charging);
 
     losepage.appendChild(logolouse);
-    losepage.appendChild(text6);
     losepage.appendChild(text5);
+    losepage.appendChild(text7);
+    losepage.appendChild(text6);
     losepage.appendChild(text4);
+
+    winpage.appendChild(logowin);
+    winpage.appendChild(text8);
+    winpage.appendChild(text9);
 
     page.appendChild(start);
     page.appendChild(losepage);
+    page.appendChild(winpage);
 
     // Modal Ingame
 
