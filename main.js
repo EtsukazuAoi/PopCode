@@ -37,7 +37,7 @@ function startanimation(){
         progressBarValue.innerText = value + '%';
         text.innerHTML = parseInt(value/100*Object.keys(languages).length);
     }
-    }, 10);
+    }, 30);
 }
 
 function gamescorevisual(){
