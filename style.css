@@ -224,7 +224,7 @@ ul {
   }
   #scores p::after {
     /*border: white 2px solid;*/
-    content: 'Scores';
+    content: 'Score';
     position: relative;
     top: 0vh;
     right: 0vw;

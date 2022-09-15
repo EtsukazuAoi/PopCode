@@ -149,7 +149,7 @@ function checkpourcentage(value){
 }
 
 function showlistfound(){
-    document.getElementById("modalgame_Title").innerHTML = "Liste des languages trouvées";
+    document.getElementById("modalgame_Title").innerHTML = "Liste des languages trouvés";
     var content = newElement("div",{"className": "listfound"});
     content.appendChild(newElement("h1",{"innerHTML": listfound.length+"/"+Object.keys(languages).length}));
     for(var i=0; i<listfound.length; i++){
@@ -229,14 +229,14 @@ async function init(){
     var logowin = newElement("img",{"src":"ressource/Logo2.svg","className":"CenteredImage centerelement"});
     var text0 = newElement("p",{"className":"centerelement langcount","style": "font-size:150px;color:#0AEFF7;background: -webkit-linear-gradient(#057C80, #0AEFF7);background-clip: border-box; -webkit-background-clip: text; -webkit-text-fill-color: transparent","innerHTML": "0"});
     var text1 = newElement("p",{"className":"centerelement","style": "font-size:15px;font-family:GothanLight","innerHTML": "Références de<br>langages de programmation<br>à retrouver"});
-    var text2 = newElement("p",{"innerHTML": "Cliquer ici pour commencée","className":"centerelement btn start0","style": "color:#FFAAFF;margin-top:5vh;display:none"});
-    var text3 = newElement("p",{"innerHTML": "Cliquer ici pour continué","className":"centerelement btn start1","style": "color:#FFAAFF;margin-top:5vh;display:none"});
-    var text4 = newElement("p",{"innerHTML": "Cliquer ici pour retourné a l'acceuil","className":"centerelement btn home", "style": "color:#FFAAFF;margin-top:5vh"});
+    var text2 = newElement("p",{"innerHTML": "Cliquer ici pour commencer","className":"centerelement btn start0","style": "color:#FFAAFF;margin-top:5vh;display:none"});
+    var text3 = newElement("p",{"innerHTML": "Cliquer ici pour continuer","className":"centerelement btn start1","style": "color:#FFAAFF;margin-top:5vh;display:none"});
+    var text4 = newElement("p",{"innerHTML": "Cliquer ici pour retourner a l'acceuil","className":"centerelement btn home", "style": "color:#FFAAFF;margin-top:5vh"});
     var text5 = newElement("p",{"innerHTML": "Perdu","className":"centerelement home","style": "position:relative;bottom:5vh;margin-bottom:-10vh;color:#F00;font-size:5em"});
     var text6 = newElement("p",{"id": "looseresult", "className":"centerelement home", "style": "font-size:8em;color:#0AEFF7;background: -webkit-linear-gradient(#057C80, #0AEFF7);background-clip: border-box; -webkit-background-clip: text; -webkit-text-fill-color: transparent"});
     var text7 = newElement("p",{"innerHTML": "Votre resultat","className":"centerelement home", "style": "color:#FFAAFF;margin-top:8vh"});
     var text8 = newElement("p",{"innerHTML": "Bravo","className":"centerelement home", "style": "/*position:relative;bottom:5vh;margin-bottom:-10vh;*/color:#0F0;font-size:5em"});
-    var text9 = newElement("p",{"innerHTML":"Cliquer ici pour retourné a l'acceuil","className":"centerelement btn home", "style":"color:#FFAAFF;margin-top:5vh"});
+    var text9 = newElement("p",{"innerHTML":"Cliquez ici pour retourner à l'acceuil","className":"centerelement btn home", "style":"color:#FFAAFF;margin-top:5vh"});
     var charging = newElement("div",{"style": "margin-top:5vh","className":"neon-bar","innerHTML": "<progress class='bar' value='0' max='100'></progress><span class='bar__value'>0%</span>"});
     var typingzone = newElement("div",{"id":"typingzone",'style': 'display:none'});
     var modalgame = newElement("div",{"id":"modalgame",'style': 'display:none'});
@@ -290,9 +290,9 @@ async function init(){
     // TYPINGZONE
 
     var textzone = newElement('p',{'id': 'textarea'});
-    var textlabel = newElement('label',{'id': 'textlabel','innerHTML':'Tapé le nom de votre languages'});
+    var textlabel = newElement('label',{'id': 'textlabel','innerHTML':'Tapez le nom de votre language'});
     textlabel.appendChild(textzone);
-    textlabel.innerHTML += " puis valider en appuyant sur la touche enter"
+    textlabel.innerHTML += " puis validez en appuyant sur la touche enter"
     typingzone.appendChild(textlabel);
     // 
 
@@ -310,7 +310,7 @@ async function init(){
     var conditions = newElement("div",{"id":"conditions","style":"display:none","innerHTML":"<h1>"+jsonfile[jsonsize-1].title+"</h1>"+jsonfile[jsonsize-1].content});
     conditions.appendChild(closebtn());
     page.appendChild(conditions);
-    var conditonbtn = newElement("span",{"className": "conditonbtn btn","innerHTML": "Conditions General"});
+    var conditonbtn = newElement("span",{"className": "conditonbtn btn","innerHTML": "Mentions légales"});
     conditonbtn.addEventListener("click", function(e) { document.getElementById("conditions").style.display = ""});
     page.appendChild(conditonbtn);
 
